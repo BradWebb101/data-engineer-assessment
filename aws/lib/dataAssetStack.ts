@@ -1,16 +1,16 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as s3 from 'aws-cdk-lib/aws-s3';
-import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
-import * as path from 'path';
+import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 
+
+//Globals added to props
 interface MyStacksProps extends cdk.StackProps {
   projectName: string;
   env: {
     account: string;
     region: string;
       };
-
 }
 
 export class DataAssetStack extends cdk.Stack {
@@ -26,12 +26,28 @@ export class DataAssetStack extends cdk.Stack {
       versioned: true
     });
 
-  // Upload CSV file to the S3 bucket
-  new s3deploy.BucketDeployment(this, `${projectName}CsvDeployment`, {
-    sources: [s3deploy.Source.asset(path.join(__dirname, '../../assets/data'))],
-    destinationBucket: bucket,
-    destinationKeyPrefix: 'data/',
+    
+  
+   // create DynamoDB table
+   const myTable = new dynamodb.Table(this, `${projectName}DynamoTable`, {
+    partitionKey: { name: 'identity/LineItemId', type: dynamodb.AttributeType.STRING },
+    billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+    removalPolicy: cdk.RemovalPolicy.DESTROY
   });
+
+  
+
+  new cdk.CfnOutput(this, `${projectName}BucketName`, {
+    value: bucket.bucketName,
+    exportName: 'bucketName'
+  });
+
+  new cdk.CfnOutput(this, `${projectName}TableName`, {
+    value: myTable.tableName,
+    exportName: 'tableName'
+  });
+
+  }
   
   }
-}
+
