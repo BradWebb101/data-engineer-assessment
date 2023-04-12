@@ -22,7 +22,7 @@ def handler(event, context, test_client=None):
         }
 
     except Exception as e:
-        print("Error scanning table: {}".format(str(e)))
+        print(f"Error scanning table: {e}")
         return {
             'statusCode': 500,
             'body': json.dumps({'message': 'Error scanning table'})
