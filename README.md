@@ -30,7 +30,7 @@ s3 -> Quicksight -> dashboard
 [Quicksight dashboard](https://eu-central-1.quicksight.aws.amazon.com/sn/dashboards/6b406573-0b54-4377-b13f-9ce15aa63178/sheets/6b406573-0b54-4377-b13f-9ce15aa63178_a7b1db2a-b95d-407b-b5ef-fa9dd74b7b89)
 
 ### Infrastrucutre diagram
-![alt text](assets/infrastructure_diagram.png)
+![alt text](./assets/infrastructure_diagram.png)
 
 ### Code details
 Problem solving:
