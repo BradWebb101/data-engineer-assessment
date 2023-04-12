@@ -50,7 +50,7 @@ To run tests, run 'pytest' from the root folder
 
 Make sure you have the AWS CDK installed
 ```
-    npm install -g aws-cdk
+npm install -g aws-cdk
 ```
 
 Bootstrap the project if its the first time CDK has run in your region
