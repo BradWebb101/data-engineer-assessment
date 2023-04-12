@@ -6,10 +6,11 @@ What I have built is event driven architecture to load data into a table and hav
 ### Principals I have followed
 - Keep it simple, 1 pipeline, 1 database and 1 api
 - All of this is to show how I code and how i approach problems, the dashboard and api are not production ready.
-- Spend time coding and building infrastructure to satify the core requirements.
+- Any time building infrastructure is time well spent.
 
-# Problem solving
-## Assumptions
+# Tasks
+## Problem solving
+### Assumptions
 Common-preference
 1. The minimum number any value can be is the length of the value
     e.g the prefix will always start with a length of 0 with the suffix having a len of the value
@@ -58,3 +59,7 @@ cdk synth --all
 Deploy 
     cdk deploy --all
 
+I did not upload the file as part of the CDK, I left it to upload to simulate the put request. 
+To try this at home, from the root directory folder upload the data to the bucket (You need aws cli installed).
+
+aws s3 cp assets/data.csv s3://postnlpipelinestoragebucket
