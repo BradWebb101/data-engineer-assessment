@@ -25,17 +25,13 @@ export class DataAssetStack extends cdk.Stack {
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       versioned: true
     });
-
     
-  
    // create DynamoDB table
    const myTable = new dynamodb.Table(this, `${projectName}DynamoTable`, {
     partitionKey: { name: 'identity/LineItemId', type: dynamodb.AttributeType.STRING },
     billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
     removalPolicy: cdk.RemovalPolicy.DESTROY
   });
-
-  
 
   new cdk.CfnOutput(this, `${projectName}BucketName`, {
     value: bucket.bucketName,
@@ -46,8 +42,6 @@ export class DataAssetStack extends cdk.Stack {
     value: myTable.tableName,
     exportName: 'tableName'
   });
-
   }
-  
-  }
+  };
 

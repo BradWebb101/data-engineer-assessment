@@ -3,6 +3,7 @@ import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
 import { DataAssetStack } from '../lib/dataAssetStack';
 import { LoadStack } from '../lib/loadStack'
+import { APIStack } from '../lib/apiStack'
 
 
 const app = new cdk.App();
@@ -16,6 +17,4 @@ const dataAssetStack = new DataAssetStack(app, `${GLOBALS.projectName}ExtractSta
 
 const loadStack = new LoadStack(app, `${GLOBALS.projectName}LoadStack`, GLOBALS);
 
-// const queryStack 
-
-// const visualStack 
+const apiStack = new APIStack(app, `${GLOBALS.projectName}APIStack`, GLOBALS)

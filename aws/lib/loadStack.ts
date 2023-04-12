@@ -38,20 +38,15 @@ export class LoadStack extends cdk.Stack {
         });
 
         // add a trigger to the S3 bucket to invoke the Lambda function when a CSV file is uploaded
-        const bucket = s3.Bucket.fromBucketName(this, 'TargetBucket', bucketName)
+        const bucket = s3.Bucket.fromBucketName(this, 'TargetBucket', bucketName);
         const table = dynamodb.Table.fromTableName(this, 'StorageTable', tableName);
 
-        //Adding additions for permissions and events
+        // add an event trigger to the bucket for the Lambda function on a PUT operation
         bucket.addEventNotification(s3.EventType.OBJECT_CREATED_PUT, new s3n.LambdaDestination(myFunction));
+
+        //Adding additions for permissions and events
         bucket.grantRead(myFunction)
         table.grantWriteData(myFunction)
-
-            // Upload CSV file to the S3 bucket
-        new s3deploy.BucketDeployment(this, `${projectName}CsvDeployment`, {
-            sources: [s3deploy.Source.asset(path.join(__dirname, '../../assets/data'))],
-            destinationBucket: s3.Bucket.fromBucketName(this, 'UploadTargetBucket', bucketName),
-            destinationKeyPrefix: 'data/',
-        });
     }
       }
 

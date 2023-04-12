@@ -16,16 +16,18 @@ file_name = 'test-file.csv'
 table_name = "test-table"
 
 # Create a test event
-test_event = {
-    "Records": [
-        {
-            "s3": {
-                "bucket": {"name": bucket_name},
-                "object": {"key": file_name},
+@pytest.fixture(scope='function')
+def test_event():
+    return {
+        "Records": [
+            {
+                "s3": {
+                    "bucket": {"name": bucket_name},
+                    "object": {"key": file_name},
+                }
             }
-        }
-    ]
-}
+        ]
+    }
 
 @pytest.fixture(scope='function')
 def s3():
@@ -101,7 +103,7 @@ def dynamo_object_serialize(python_obj: dict) -> dict:
         for k, v in python_obj.items()
     }
 
-def test_dynamo_put(s3, dynamodb, monkeypatch):
+def test_dynamo_put(s3, dynamodb, monkeypatch, test_event):
     #ENV vars passed to lambda as part of docker image
     env_vars = {
         'REGION': region_name,

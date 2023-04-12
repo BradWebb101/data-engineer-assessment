@@ -13,12 +13,12 @@ def dynamo_object_serialize(python_obj: dict) -> dict:
 def handler(event:dict, context:dict, test_s3_client=None, test_dynamodb_client=None) -> dict:
     region_name = os.getenv('REGION')
     
-    if test_s3_client != None:
+    if test_s3_client is not None:
         s3_client = test_s3_client
     else:
         s3_client = boto3.client("s3", region_name=region_name)
 
-    if test_dynamodb_client != None:
+    if test_dynamodb_client is not None:
         dynamodb_client = test_dynamodb_client
     else:
         dynamodb_client = boto3.client("dynamodb", region_name=region_name)
