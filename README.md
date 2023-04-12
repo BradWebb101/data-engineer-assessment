@@ -30,7 +30,7 @@ s3 -> Quicksight -> dashboard
 [Quicksight dashboard](https://eu-central-1.quicksight.aws.amazon.com/sn/dashboards/6b406573-0b54-4377-b13f-9ce15aa63178/sheets/6b406573-0b54-4377-b13f-9ce15aa63178_a7b1db2a-b95d-407b-b5ef-fa9dd74b7b89)
 
 ### Infrastrucutre diagram
-![alt text](./assets/infrastructure_diagram.png)
+![alt text](./assets/infrastructure_diagram.png "Title")
 
 ### Code details
 Problem solving:
@@ -48,18 +48,26 @@ To run tests, run 'pytest' from the root folder
 ### To deploy 
 
 Make sure you have the AWS CDK installed
+```
     npm install -g aws-cdk
+```
 
 Bootstrap the project if its the first time CDK has run in your region
+```
     cdk bootstrap
+```
 
 Synth the stacks locally 
-cdk synth --all 
-
-Deploy 
+```
+    cdk synth --all 
+```
+Deploy
+``` 
     cdk deploy --all
+```
 
 I did not upload the file as part of the CDK, I left it to upload to simulate the put request. 
 To try this at home, from the root directory folder upload the data to the bucket (You need aws cli installed).
-
+```
 aws s3 cp assets/data.csv s3://postnlpipelinestoragebucket
+```
