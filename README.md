@@ -27,10 +27,11 @@ csv -> s3 -> dynamodb -> api gateway
 
 ### Visulisation stack
 s3 -> Quicksight -> dashboard
+
 [Quicksight dashboard](https://eu-central-1.quicksight.aws.amazon.com/sn/dashboards/6b406573-0b54-4377-b13f-9ce15aa63178/sheets/6b406573-0b54-4377-b13f-9ce15aa63178_a7b1db2a-b95d-407b-b5ef-fa9dd74b7b89)
 
 ### Infrastrucutre diagram
-![alt text](./assets/infrastructure_diagram.png "Title")
+![alt text](../assets/infrastructure_diagram.png "Title")
 
 ### Code details
 Problem solving:
@@ -54,16 +55,16 @@ Make sure you have the AWS CDK installed
 
 Bootstrap the project if its the first time CDK has run in your region
 ```
-    cdk bootstrap
+cdk bootstrap
 ```
 
 Synth the stacks locally 
 ```
-    cdk synth --all 
+cdk synth --all 
 ```
 Deploy
 ``` 
-    cdk deploy --all
+cdk deploy --all
 ```
 
 I did not upload the file as part of the CDK, I left it to upload to simulate the put request. 
