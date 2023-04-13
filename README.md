@@ -46,6 +46,11 @@ All tests within the lambda folders functions as explained above.
 
 To run tests, run 'pytest' from the root folder
 
+# API usage
+The api is simple, it either does a scan of all columns and values if no arguments are passed. If you want to reduce the column size and return only specific columns add details to the headers as follows. 
+
+headers = {columns:[list_of_columns]}
+
 ### To deploy 
 
 Make sure you have the AWS CDK installed
