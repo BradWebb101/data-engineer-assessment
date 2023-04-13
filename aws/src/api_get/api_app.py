@@ -12,14 +12,27 @@ def handler(event, context, test_client=None):
         table = dynamodb.Table(table_name)
 
     try:
-        response = table.scan()
+        # Check if headers query is provided
+        if event.get('headers', {}).get('columns', None):
+            columns = event.get('headers', None).get('columns', None)
+            projection_expression = ", ".join(columns)
+            print(projection_expression)
+            response = table.scan(ProjectionExpression=projection_expression)
 
-        items = response['Items']
+            items = response['Items']
 
-        return {
-            'statusCode': 200,
-            'body': json.dumps(items)
-        }
+            return {
+                'statusCode': 200,
+                'body': json.dumps(items)
+            }
+        else:
+            response = table.scan()
+            items = response['Items']
+
+            return {
+                'statusCode': 200,
+                'body': json.dumps(items)
+            }
 
     except Exception as e:
         print(f"Error scanning table: {e}")

@@ -45,6 +45,13 @@ def dynamodb_table():
         )
         yield table
 
+@pytest.fixture
+def limited_columns():
+    return {
+        "headers":{
+        "columns":['first_name', 'age']
+        }
+    }
 
 def test_all_data_handler(dynamodb_table, monkeypatch):
     # Call the function and check the response
@@ -53,4 +60,13 @@ def test_all_data_handler(dynamodb_table, monkeypatch):
     response = handler({}, {}, dynamodb_table)
     expected_response = {'statusCode': 200, 'body': json.dumps([{"id": "1", "first_name": "John", "age": "23"}, {"id": "2", "first_name": "Jane", "age": "27"}])}
     assert response == expected_response
+
+def test_specific_columns(dynamodb_table, limited_columns, monkeypatch):
+    # Call the function and check the response
+    monkeypatch.setenv('TABLE_NAME', 'test_table')
+    from api_app import handler
+    response = handler(limited_columns, {}, dynamodb_table)
+    expected_response = {'statusCode': 200, 'body': json.dumps([{"first_name": "John", "age": "23"}, {"first_name": "Jane", "age": "27"}])}
+    assert response == expected_response
+
 
