@@ -3,8 +3,8 @@ import boto3
 import csv
 import moto
 from io import StringIO
-from index import lambda_handler
-import snappy
+from app import lambda_handler
+import gzip
 
 entry_bucket = 'entry-bucket'
 output_bucket = 'output-bucket'
@@ -81,7 +81,7 @@ def test_account_285916830885_has_three_items(mock_s3_client, monkeypatch,test_e
     monkeypatch.setenv('ACCOUNT_KEY','lineItem/UsageAccountId')
     response = lambda_handler(test_event, {}, mock_s3_client)
     response = mock_s3_client.get_object(Bucket=output_bucket, Key='lineItem/667663686041/2022/6/1/aws_usage_file.csv')
-    contents = snappy.uncompress(response['Body'].read()).decode('utf-8').splitlines()
+    contents = gzip.decompress(response['Body'].read()).decode('utf-8').splitlines()
     # Create a StringIO object to use as a file-like object
     csv_file = StringIO()
     # Create a CSV writer object
@@ -123,7 +123,7 @@ def test_sum_costs_field(mock_s3_client, monkeypatch,test_event):
     for i in output_bucket_contents['Contents']:
         print(i)
         response = mock_s3_client.get_object(Bucket=output_bucket, Key=i['Key'])
-        contents = snappy.uncompress(response['Body'].read()).decode('utf-8').splitlines()
+        contents = gzip.decompress(response['Body'].read()).decode('utf-8').splitlines()
         for row, value in enumerate(contents):
             if row == 0:
                 pass
