@@ -1,0 +1,14 @@
+# Use an official Python runtime as a parent image
+FROM public.ecr.aws/lambda/python:3.9
+
+# Copy the requirements file into the container
+COPY requirements.txt .
+
+# Install any needed packages specified in requirements.txt
+RUN  pip3 install -r requirements.txt --target "${LAMBDA_TASK_ROOT}"
+
+# Copy the rest of the application code into the container
+COPY app.py ${LAMBDA_TASK_ROOT}
+
+# Set the command to run the application
+CMD ["app.lambda_handler"]
