@@ -4,6 +4,7 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as glue from 'aws-cdk-lib/aws-glue';
 import * as lambda from 'aws-cdk-lib/aws-lambda'
 import * as s3n from 'aws-cdk-lib/aws-s3-notifications'
+import * as iam from 'aws-cdk-lib/aws-iam'
 import * as path from 'path'
 import * as ecr from 'aws-cdk-lib/aws-ecr'
 
@@ -64,6 +65,7 @@ export class AthenaStack extends cdk.Stack {
     uploadBucket.grantReadWrite(dynamoPutLambda);
     databaseBucket.grantReadWrite(dynamoPutLambda);
 
+
     // Add an S3 object creation event notification to trigger the Lambda function
     uploadBucket.addEventNotification(s3.EventType.OBJECT_CREATED, new s3n.LambdaDestination(dynamoPutLambda));
 
@@ -75,6 +77,30 @@ export class AthenaStack extends cdk.Stack {
         description: 'A database for all the costs of the AWS organisation across multiple accounts'
       }
     });
+    const athenaServicePrincipal = new iam.ServicePrincipal('athena.amazonaws.com');
+
+          databaseBucket.addToResourcePolicy(new iam.PolicyStatement({
+          actions: [
+            's3:GetObject',
+            's3:GetObjectAcl',
+            's3:GetObjectVersion',
+            's3:GetObjectVersionAcl',
+            's3:GetBucketAcl',
+            's3:GetBucketLocation',
+            's3:GetBucketPolicy',
+            's3:ListBucket',
+          's3:ListBucketVersions',
+          's3:ListBucketMultipartUploads'
+        ],
+        effect: iam.Effect.ALLOW,
+        principals: [athenaServicePrincipal],
+        resources: [
+          databaseBucket.bucketArn,
+          `${databaseBucket.bucketArn}/*`,
+        ],
+        sid: 'AthenaReadAccess',
+      }));
+  
 
     const identitytable = new glue.CfnTable(this, 'identityTable',{ 
       catalogId:env.account,
@@ -84,7 +110,7 @@ export class AthenaStack extends cdk.Stack {
       
           parameters: {
                   'serialization.format': '1',
-                'compressionType': 'snappy', // specify the compression codec as Snappy
+                'compressionType': 'gzip', // specify the compression codec as gzip
                 'delimiter': ',',
                 'skip.header.line.count': '1'
               },
@@ -93,10 +119,10 @@ export class AthenaStack extends cdk.Stack {
       {name: 'LineItemId', type: 'string'}, 
       {name: 'TimeInterval', type: 'string'}, 
       ],
-      location: `s3://${uploadBucket.bucketName}/identity`, 
+      location: `s3://${databaseBucket.bucketName}/identity`, 
       inputFormat: 'org.apache.hadoop.mapred.TextInputFormat',
       
-                outputFormat: 'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat',
+                outputFormat: 'org.apache.hadoop.mapreduce.lib.input.CSVTextInputFormat',
       
                 serdeInfo: {
       
@@ -106,7 +132,7 @@ export class AthenaStack extends cdk.Stack {
       
                     'serialization.format': '1',
       
-                    'compressionType': 'snappy' // specify the compression codec as Snappy
+                    'compressionType': 'gzip' // specify the compression codec as gzip
       
                   }
       
