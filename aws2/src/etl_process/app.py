@@ -99,7 +99,7 @@ def lambda_handler(event, context, test_client=None):
                 csv_writer.writerow(i)
             csv_data.seek(0)
             csv_data = gzip.compress(csv_data.getvalue().encode('utf-8'))
-            s3.put_object(Bucket=database_bucket, Key=output_file_name, Body=csv_data, ContentEncoding='snappy')
+            s3.put_object(Bucket=database_bucket, Key=output_file_name, Body=csv_data, ContentEncoding='gzip')
 
     return {
         'statusCode': 200,

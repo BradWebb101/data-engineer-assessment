@@ -58,7 +58,7 @@ for key, value in unique_values.items():
 #         STORED AS CSV
 #         LOCATION 's3://${uploadBucket.bucketName}/data/'''
 #     sql_string += f'{t} \n'
-#     sql_string += '''TBLPROPERTIES ('csv.compress'='SNAPPY')'''
+#     sql_string += '''TBLPROPERTIES ('csv.compress'='gzip')'''
 #     print(sql_string)
 #     print('\n')
 #     print('\n')
@@ -114,7 +114,7 @@ for t in new_dict.keys():
     table_string += """
     parameters: {
            'serialization.format': '1',
-          'compressionType': 'snappy', // specify the compression codec as Snappy
+          'compressionType': 'gzip', // specify the compression codec as gzip
           'delimiter': ',',
           'skip.header.line.count': '1'
         },
@@ -136,7 +136,7 @@ for t in new_dict.keys():
             serializationLibrary: 'org.apache.hadoop.hive.serde2.columnar.LazyBinaryColumnarSerDe', // specify the serde as LazyBinaryColumnarSerDe\n
             parameters: {\n
               'serialization.format': '1',\n
-              'compressionType': 'snappy' // specify the compression codec as Snappy\n
+              'compressionType': 'gzip' // specify the compression codec as gzip\n
             }\n
           }\n
         },\n
