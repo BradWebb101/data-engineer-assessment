@@ -100,7 +100,6 @@ export class AthenaStack extends cdk.Stack {
         ],
         sid: 'AthenaReadAccess',
       }));
-  
 
     const identitytable = new glue.CfnTable(this, 'identityTable',{ 
       catalogId:env.account,
@@ -150,7 +149,5 @@ export class AthenaStack extends cdk.Stack {
       
             }
           });
-      
-
       }
-    }
+    };
